@@ -32,9 +32,6 @@ MainWindow::MainWindow(){
 
 	tabWidget->addTab(view, url.toString());
 	view->load(url);
-
-	resize(800, 600);
-	showMaximized();
 }
 
 void MainWindow::changeUrl(QString url)
