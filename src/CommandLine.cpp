@@ -15,17 +15,25 @@ void CommandLine::executeCommand()
 {
 	QString command = text();
 	QRegExp open(":open (.*)");
-	QRegExp rx("\\b(http://|https://)\\b");
 	QRegExp newTab(":tabnew (.*)");
+	QRegExp protocol_checker("\\b(http://|https://)\\b");
+	QString url;
 
-	int i = rx.indexIn(command);
-	if (open.exactMatch(command) && i == -1)
-		emit(openUrlRequested("http://" + open.cap(1)));
-	
+	int protocol_index = protocol_checker.indexIn(command);
 	if (open.exactMatch(command))
-		emit(openUrlRequested(open.cap(1)));
+	{
+		url = open.cap(1);
+        if (protocol_index == -1)
+			url = "http://" + url;
+		emit(openUrlRequested(url));
+	}
 
 	if (newTab.exactMatch(command))
-		emit(newTabRequested(newTab.cap(1)));
+	{
+		url = newTab.cap(1);
+        if (protocol_index == -1)
+			url = "http://" + url;
+		emit(newTabRequested(url));
+	}
 	emit(clear());
 }
